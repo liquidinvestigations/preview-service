@@ -12,8 +12,8 @@ mkdir -p /tmp/cache
 # https://github.com/benoitc/gunicorn/issues/2695
 DISPLAY=:99.0 gunicorn -b 0.0.0.0:8000 \
   --name thumbnail-preview-service \
-  --worker-class uvicorn.workers.UvicornWorker --threads 1 \
-  --workers 4 \
+  --worker-class timeout_worker.RequestKillerWorker --threads 1 \
+  --workers 8 \
   --timeout=200 \
   --max-requests 50 --max-requests-jitter 30 \
   app:app

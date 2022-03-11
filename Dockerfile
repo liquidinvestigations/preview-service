@@ -23,6 +23,7 @@ RUN pip install gunicorn
 
 COPY docker-entrypoint.sh /app/
 COPY app.py /app/
+COPY timeout_worker.py /app/
 
 RUN groupadd -r previewservice && useradd -r -s /bin/false -g previewservice previewservice
 RUN chown -R previewservice:previewservice /app
