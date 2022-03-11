@@ -1,0 +1,59 @@
+kind: pipeline
+name: publish
+
+concurrency:
+  limit: 1
+
+trigger:
+  status:
+  - success
+  event:
+  - push
+  - tag
+
+
+steps:
+- name: docker push branch ${DRONE_COMMIT_BRANCH}
+  image: plugins/docker
+  settings:
+    repo: liquidinvestigations/preview-service
+    tags: ${DRONE_COMMIT_BRANCH}
+    build_args:
+      - with_models=true
+    username:
+      from_secret: docker_username
+    password:
+      from_secret: docker_password
+  when:
+    event:
+    - push
+    branch:
+      exclude:
+      - dependabot/**
+
+- name: docker push autotag + latest
+  image: plugins/docker
+  settings:
+    repo: liquidinvestigations/preview-service
+    auto_tag: true
+    build_args:
+      - with_models=true
+    username:
+      from_secret: docker_username
+    password:
+      from_secret: docker_password
+
+---
+
+kind: secret
+name: docker_username
+get:
+  path: liquid/ci/drone.docker
+  name: username
+
+---
+kind: secret
+name: docker_password
+get:
+  path: liquid/ci/drone.docker
+  name: password

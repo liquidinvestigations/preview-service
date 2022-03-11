@@ -19,6 +19,8 @@ RUN pip install pipenv vtk
 COPY Pipfile* /app/
 RUN pipenv install --system
 
+RUN pip install gunicorn
+
 COPY docker-entrypoint.sh /app/
 COPY app.py /app/
 
