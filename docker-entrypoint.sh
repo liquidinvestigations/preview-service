@@ -11,7 +11,9 @@ mkdir -p /tmp/cache
 # must use sync for timeout to work:
 # https://github.com/benoitc/gunicorn/issues/2695
 DISPLAY=:99.0 gunicorn -b 0.0.0.0:8000 \
+  --name thumbnail-preview-service \
+  --worker-class uvicorn.workers.UvicornWorker --threads 1 \
+  --workers 4 \
   --timeout=200 \
-  --worker-class=sync --workers 30 \
-  --max-requests 30 --max-requests-jitter 20 \
+  --max-requests 50 --max-requests-jitter 30 \
   app:app
