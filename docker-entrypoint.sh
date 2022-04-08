@@ -7,6 +7,9 @@ Xvfb :99 -screen 0 1x1x16 > /dev/null 2>&1 &
 mkdir -p /tmp/files
 mkdir -p /tmp/cache
 
+mkdir -p $TMP/files
+mkdir -p $TMP/cache
+
 
 ulimit -S -c 0
 ulimit -c 0
@@ -17,7 +20,7 @@ ulimit -c 0
 DISPLAY=:99.0 gunicorn -b 0.0.0.0:8000 \
   --name thumbnail-preview-service \
   --worker-class timeout_worker.RequestKillerWorker --threads 1 \
-  --workers 8 \
+  --workers $WORKER_COUNT \
   --timeout=200 \
   --max-requests 50 --max-requests-jitter 30 \
   app:app

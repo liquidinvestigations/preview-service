@@ -30,5 +30,6 @@ RUN chown -R previewservice:previewservice /app
 USER previewservice
 
 EXPOSE 8000
+ENV WORKER_COUNT 8
 
 CMD ["./docker-entrypoint.sh"]
